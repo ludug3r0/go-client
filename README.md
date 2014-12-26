@@ -4,7 +4,7 @@ A Clojure & ClojureScript client for playing the Game of Go
 
 ## Usage
 
-Execute with `lein run -m go-client.handler` and access on http://localhost:5000
+Execute with `lein run -m handler` and access on http://localhost:5000
 
 ## License
 

@@ -6,6 +6,7 @@ pom.xml
 /checkouts
 /.env
 /target
+/resources/public/app
 .idea/
 .lein-repl-history
 .nrepl-port
