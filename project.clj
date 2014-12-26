@@ -1,6 +1,6 @@
 (defproject go-client "0.1.0-SNAPSHOT"
-            :description "FIXME: write description"
-            :url "http://example.com/FIXME"
+            :description "A Clojure & ClojureScript client for playing the Game of Go"
+            :url "https://github.com/ludug3r0/go-client"
             :license {:name "Eclipse Public License"
                       :url  "http://www.eclipse.org/legal/epl-v10.html"}
             :dependencies [[org.clojure/clojure "1.6.0"]
