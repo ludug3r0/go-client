@@ -12,10 +12,12 @@
 
 (def ^:private main-page
   (html5 [:head
-          (include-css "reset.css")]
+          (include-css "reset.css"
+                       "app.css"
+                       "board.css")]
          [:body
           (include-js "app/main.js")
-          [:script {:type "text/javascript"} "hello.run();"]]))
+          [:script {:type "text/javascript"} "app.run();"]]))
 
 (defroutes
   routes

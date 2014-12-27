@@ -10,7 +10,9 @@
                            [http-kit "2.1.19"]
                            [javax.servlet/servlet-api "2.5"]
                            [reagent "0.4.3"]
-                           [compojure "1.3.1"]]
+                           [compojure "1.3.1"]
+                           [org.clojars.ludug3r0/go-schema "0.0.4-SNAPSHOT"]
+                           [org.clojars.ludug3r0/go-rules "0.0.2-SNAPSHOT"]]
             :source-paths ["src/clj"]
 
             :profiles {:dev {:plugins [[lein-cljsbuild "1.0.3"]]}}

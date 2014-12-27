@@ -1,0 +1,219 @@
+html {
+    overflow-y: scroll;
+}
+
+.board {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    margin: auto;
+    padding: 0;
+    background: url('/board.svg'), url('wood.jpg') no-repeat;
+    background-size: 100% 100%;
+    background-color:#FFDD88;
+    display: block;
+    width: 550px;
+    height: 550px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.board .stone {
+    display: block;
+    color: transparent;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    background-size: 100% 100%;
+    border-radius: 40px;
+    width: 5.0%;
+    height: 5.0%;
+}
+
+.board .stone.black {
+    background: url('/black.svg') no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.9), inset -1px -1px 1px rgba(0,0,0,0.7);
+}
+
+.board .stone.ghost-black:hover {
+    background: url('/black.svg') no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.9), inset -1px -1px 1px rgba(0,0,0,0.7);
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+
+.board .stone.white {
+    background: url('/white.svg') no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 1px 1px 2px rgba(0,0,0,1), inset -0px -0px 0px rgba(0,0,0,1);
+}
+
+.board .stone.ghost-white:hover {
+    background: url('/white.svg') no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 1px 1px 2px rgba(0,0,0,1), inset -0px -0px 0px rgba(0,0,0,1);
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+
+.board .line-1 {
+    top: 94.30%;
+}
+
+.board .line-2 {
+    top: 89.08%;
+}
+
+.board .line-3 {
+    top: 83.87%;
+}
+
+.board .line-4 {
+    top: 78.66%;
+}
+
+.board .line-5 {
+    top: 73.45%;
+}
+
+.board .line-6 {
+    top: 68.24%;
+}
+
+.board .line-7 {
+    top: 63.03%;
+}
+
+.board .line-8 {
+    top: 57.82%;
+}
+
+.board .line-9 {
+    top: 52.61%;
+}
+
+.board .line-10 {
+    top: 47.39%;
+}
+
+.board .line-11 {
+    top: 42.18%;
+}
+
+.board .line-12 {
+    top: 36.97%;
+}
+
+.board .line-13 {
+    top: 31.76%;
+}
+
+.board .line-14 {
+    top: 26.55%;
+}
+
+.board .line-15 {
+    top: 21.34%;
+}
+
+.board .line-16 {
+    top: 16.13%;
+}
+
+.board .line-17 {
+    top: 10.92%;
+}
+
+.board .line-18 {
+    top: 5.71%;
+}
+
+.board .line-19 {
+    top: 0.5%;
+}
+
+.board .column-1 {
+    left: 0.5%;
+}
+
+.board .column-2 {
+    left: 5.71%;
+}
+
+.board .column-3 {
+    left: 10.92%;
+}
+
+.board .column-4 {
+    left: 16.13%;
+}
+
+.board .column-5 {
+    left: 21.34%;
+}
+
+.board .column-6 {
+    left: 26.55%;
+}
+
+.board .column-7 {
+    left: 31.76%;
+}
+
+.board .column-8 {
+    left: 36.97%;
+}
+
+.board .column-9 {
+    left: 42.18%;
+}
+
+.board .column-10 {
+    left: 47.39%;
+}
+
+.board .column-11 {
+    left: 52.61%;
+}
+
+.board .column-12 {
+    left: 57.82%;
+}
+
+.board .column-13 {
+    left: 63.03%;
+}
+
+.board .column-14 {
+    left: 68.24%;
+}
+
+.board .column-15 {
+    left: 73.45%;
+}
+
+.board .column-16 {
+    left: 78.66%;
+}
+
+.board .column-17 {
+    left: 83.87%;
+}
+
+.board .column-18 {
+    left: 89.08%;
+}
+
+.board .column-19 {
+    left: 94.30%;
+}
