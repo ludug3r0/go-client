@@ -43,8 +43,7 @@
 
 (defn render-ghosts
   [game]
-  (for [valid-placement [[:black [10 10]]
-                         [:white [10 9]]]]
+  (for [valid-placement (game/possible-placements @game)]
     [render-ghost game valid-placement]))
 
 (defn render
