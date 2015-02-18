@@ -2,53 +2,39 @@
   (:require [go.game :as game]))
 
 (defn- render-placement
-  [placement]
-  (let [color (first placement)
-        vertex (second placement)
-        line (-> vertex first str)
-        column (-> vertex second str)]
-    [(keyword (clojure.string/join
-                "."
-                ["div"
-                 "stone"
-                 (name color)
-                 (str "line-" line)
-                 (str "column-" column)]))]))
-
-(defn- render-placements
-  [game]
-  (for [placement (game/configuration game)]
-    [render-placement placement]))
-
-
-;;TODO: move to game namespace?
-(defn- place-stone
-  [game placement]
-  (swap! game conj placement))
+       [{:keys [color vertex line column]}]
+       [(keyword (clojure.string/join
+                   "."
+                   ["div"
+                    "stone"
+                    color
+                    (str "line-" line)
+                    (str "column-" column)]))])
 
 (defn- render-ghost
-  [game placement]
-  (let [color (first placement)
-        vertex (second placement)
-        line (-> vertex first str)
-        column (-> vertex second str)]
-    [(keyword (clojure.string/join
-                "."
-                ["div"
-                 "stone"
-                 (str "ghost-"(name color))
-                 (str "line-" line)
-                 (str "column-" column)]))
-     {:on-click #(place-stone game placement)}]))
+       [{:keys [color vertex line column]}]
+       [(keyword (clojure.string/join
+                   "."
+                   ["div"
+                    "stone"
+                    (str "ghost-" color)
+                    (str "line-" line)
+                    (str "column-" column)]))])
 
-(defn render-ghosts
-  [game]
-  (for [valid-placement (game/possible-placements @game)]
-    [render-ghost game valid-placement]))
+(defn- placement [stone]
+      (let [vertex (second stone)]
+           {:color  (-> stone first name)
+            :vertex vertex
+            :line   (-> vertex first str)
+            :column (-> vertex second str)}))
+
 
 (defn render
-  [game]
-  [:div.board
-   (concat
-     (render-placements @game)
-     (render-ghosts game))])
+      [game]
+      (let [configuration (game/configuration @game)
+            placements (map placement configuration)
+            empty-placements (map placement (game/empty-placements @game))]
+           [:div.board
+            (concat
+              (mapv render-placement placements)
+              (mapv render-ghost empty-placements))]))
