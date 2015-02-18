@@ -4,7 +4,7 @@
             :license {:name "Eclipse Public License"
                       :url  "http://www.eclipse.org/legal/epl-v10.html"}
             :dependencies [[org.clojure/clojure "1.6.0"]
-                           [org.clojure/clojurescript "0.0-2511"]
+                           [org.clojure/clojurescript "0.0-2850"]
                            [environ "1.0.0"]
                            [ring/ring-devel "1.3.2"]
                            [http-kit "2.1.19"]
@@ -15,7 +15,7 @@
                            [org.clojars.ludug3r0/go-rules "0.0.2-SNAPSHOT"]]
             :source-paths ["src/clj"]
 
-            :profiles {:dev {:plugins [[lein-cljsbuild "1.0.3"]]}}
+            :profiles {:dev {:plugins [[lein-cljsbuild "1.0.4"]]}}
 
             :cljsbuild {:builds [{:source-paths ["src/cljs"]
                                   :compiler     {:preamble     ["reagent/react.js"]
@@ -24,5 +24,5 @@
                                                  :output-dir   "resources/public/app/temp"
                                                  :pretty-print true}}]}
 
-            :prep-tasks [["cljsbuild" "clean"]
+            :prep-tasks [["clean"]
                          ["cljsbuild" "once"]])
