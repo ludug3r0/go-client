@@ -38,13 +38,37 @@ html {
     height: 5.0%;
 }
 
+.board .vertex {
+    display: block;
+    color: transparent;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    background-size: 100% 100%;
+    border-radius: 40px;
+    width: 5.0%;
+    height: 5.0%;
+}
+
+.board .placement {
+    display: block;
+    color: transparent;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    background-size: 100% 100%;
+    border-radius: 40px;
+    width: 5.0%;
+    height: 5.0%;
+}
+
 .board .stone.black {
     background: url('/black.svg') no-repeat;
     background-size: 100% 100%;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.9), inset -1px -1px 1px rgba(0,0,0,0.7);
 }
 
-.board .stone.ghost-black:hover {
+.board .placement.black:hover {
     background: url('/black.svg') no-repeat;
     background-size: 100% 100%;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.9), inset -1px -1px 1px rgba(0,0,0,0.7);
@@ -58,7 +82,7 @@ html {
     box-shadow: 1px 1px 2px rgba(0,0,0,1), inset -0px -0px 0px rgba(0,0,0,1);
 }
 
-.board .stone.ghost-white:hover {
+.board .placement.white:hover {
     background: url('/white.svg') no-repeat;
     background-size: 100% 100%;
     box-shadow: 1px 1px 2px rgba(0,0,0,1), inset -0px -0px 0px rgba(0,0,0,1);

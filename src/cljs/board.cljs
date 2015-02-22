@@ -16,13 +16,14 @@
                  (str "column-" column)]))]))
 
 (defn- render-empty-vertex
-  [vertex]
+  [game vertex]
   [(keyword (clojure.string/join
               "."
               ["div"
                "vertex"
                (str "line-" (-> vertex first str))
-               (str "column-" (-> vertex second str))]))])
+               (str "column-" (-> vertex second str))]))
+   {:on-click #(swap! game game/occupy-vertex vertex)}])
 
 (defn render
   [game]
@@ -31,4 +32,4 @@
     [:div.board
      (concat
        (mapv render-stone configuration)
-       (mapv render-empty-vertex empty-vertices))]))
+       (mapv (partial render-empty-vertex game) empty-vertices))]))
