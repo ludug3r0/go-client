@@ -1,4 +1,4 @@
-(ns board
+(ns go-client.board
   (:require [go.game :as game]))
 
 (defn- render-stone

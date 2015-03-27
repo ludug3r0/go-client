@@ -1,6 +1,6 @@
-(ns app
+(ns go-client.app
   (:require [reagent.core :as reagent]
-            [board :as board]))
+            [go-client.board :as board]))
 
 (def ear-reddening-game [[:black [16 17]]
                          [:white [17 4]]
