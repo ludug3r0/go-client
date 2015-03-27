@@ -23,7 +23,7 @@
                                    [:white [6 15]]])
 
 ;;global state
-(def ^:private state (atom {:game ear-reddening-game}))
+(defonce ^:private state (atom {:game ear-reddening-game}))
 
 ;;cursors
 (def game (cursor state [:game]))
