@@ -7,6 +7,7 @@
         color (-> stone first name)
         line (-> vertex first str)
         column (-> vertex second str)]
+    ^{:key [line column]}
     [(keyword (clojure.string/join
                 "."
                 ["div"
@@ -17,13 +18,16 @@
 
 (defn- render-empty-vertex
   [game vertex]
-  [(keyword (clojure.string/join
-              "."
-              ["div"
-               "vertex"
-               (str "line-" (-> vertex first str))
-               (str "column-" (-> vertex second str))]))
-   {:on-click #(swap! game game/occupy-vertex vertex)}])
+  (let [line (-> vertex first str)
+        column (-> vertex second str)]
+    ^{:key [line column]}
+    [(keyword (clojure.string/join
+                "."
+                ["div"
+                 "vertex"
+                 (str "line-" line)
+                 (str "column-" column)]))
+     {:on-click #(swap! game game/occupy-vertex vertex)}]))
 
 (defn render
   [game]

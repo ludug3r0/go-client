@@ -4,7 +4,9 @@
               [secretary.core :as secretary :include-macros true]
               [goog.events :as events]
               [goog.history.EventType :as EventType]
-              [cljsjs.react :as react])
+              [cljsjs.react :as react]
+              [go-client.board :as board]
+              [go-client.app :as app])
     (:import goog.History))
 
 ;; -------------------------
@@ -12,7 +14,8 @@
 
 (defn board []
   [:div [:h2 "Welcome to go-client"]
-   [:div [:a {:href "#/about"} "go to about page"]]])
+   [:div [:a {:href "#/about"} "go to about page"]]
+   [board/render app/game]])
 
 (defn about-page []
   [:div [:h2 "About go-client"]
