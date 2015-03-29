@@ -1,5 +1,6 @@
 (ns go-client.board
-  (:require [go.game :as game]))
+  (:require [go.game :as game]
+            [reagent.core :refer [atom]]))
 
 (defn- render-stone
   [stone]
@@ -7,7 +8,6 @@
         color (-> stone first name)
         line (-> vertex first str)
         column (-> vertex second str)]
-    ^{:key [line column]}
     [(keyword (clojure.string/join
                 "."
                 ["div"
@@ -16,24 +16,65 @@
                  (str "line-" line)
                  (str "column-" column)]))]))
 
-(defn- render-empty-vertex
-  [game vertex]
+(defn- set-vertex-as-playable [vertex-data vertex]
+  (swap! vertex-data update-in [:empty] disj vertex)
+  (swap! vertex-data update-in [:playable] conj vertex))
+
+(defn- set-vertex-as-non-playable [vertex-data vertex]
+  (swap! vertex-data update-in [:empty] disj vertex))
+
+(defn- render-vertex
+  [game vertex-data vertex]
   (let [line (-> vertex first str)
         column (-> vertex second str)]
-    ^{:key [line column]}
     [(keyword (clojure.string/join
                 "."
                 ["div"
                  "vertex"
                  (str "line-" line)
                  (str "column-" column)]))
+     {:on-mouse-over #(if (game/playable-vertex? @game vertex)
+                         (set-vertex-as-playable vertex-data vertex)
+                         (set-vertex-as-non-playable vertex-data vertex))}]))
+
+(defn- render-playable-stone
+  [game vertex]
+  (let [current-player (-> @game game/current-player-color name)
+        line (-> vertex first str)
+        column (-> vertex second str)]
+    [(keyword (clojure.string/join
+                "."
+                ["div"
+                 "placement"
+                 current-player
+                 (str "line-" line)
+                 (str "column-" column)]))
      {:on-click #(swap! game game/occupy-vertex vertex)}]))
 
-(defn render
+(defn- render-placed-stones [stones]
+  [:div
+   (for [stone stones]
+     ^{:key (second stone)}
+     [render-stone stone])])
+
+(defn- render-empty-vertices [game vertex-data]
+  [:div
+   (for [vertex (:empty @vertex-data)]
+     ^{:key vertex}
+     [render-vertex game vertex-data vertex])])
+
+(defn- render-playable-vertices [game vertex-data]
+  [:div
+   (for [vertex (:playable @vertex-data)]
+     ^{:key vertex}
+     [render-playable-stone game vertex])])
+
+(defn render-game
   [game]
-  (let [configuration (game/configuration @game)
-        empty-vertices (game/empty-vertices @game)]
+  (let [placed-stones (game/configuration @game)
+        vertex-data (atom {:empty    (set (game/empty-vertices @game))
+                           :playable (set [])})]
     [:div.board
-     (concat
-       (mapv render-stone configuration)
-       (mapv (partial render-empty-vertex game) empty-vertices))]))
+     [render-placed-stones placed-stones]
+     [render-empty-vertices game vertex-data]
+     [render-playable-vertices game vertex-data]]))

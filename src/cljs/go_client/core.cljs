@@ -13,13 +13,12 @@
 ;; Views
 
 (defn board []
-  [:div [:h2 "Welcome to go-client"]
-   [:div [:a {:href "#/about"} "go to about page"]]
-   [board/render app/game]])
+  [:div #_[:a {:href "#/about"} "go to about page"]
+   [board/render-game app/game]])
 
 (defn about-page []
-  [:div [:h2 "About go-client"]
-   [:div [:a {:href "#/"} "go to the home page"]]])
+  [:div
+   [:a {:href "#/"} "go to the home page"]])
 
 (defn current-page []
   [:div [(session/get :current-page)]])

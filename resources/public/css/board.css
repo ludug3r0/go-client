@@ -10,7 +10,7 @@ html {
     -ms-user-select: none;
     user-select: none;
 
-    margin: 3em auto;
+    margin: auto;
     padding: 0;
     background: url('/images/board.svg'), url('/images/wood.jpg') no-repeat;
     background-size: 100% 100%;
