@@ -2,13 +2,27 @@
 
 A Clojure & ClojureScript client for playing the Game of Go
 
-## Usage
+## Development Mode
 
-Execute with `lein figwheel` and access on http://localhost:3449
+```
+lein clean
+lein figwheel
+```
+
+Figwheel will automatically push cljs changes to the browser.
+
+Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
+
+## Production Build
+
+```
+lein clean
+lein cljsbuild once min
+```
 
 ## License
 
-Copyright © 2014 Rafael Oliveira
+Copyright © 2014-2015 Rafael Oliveira
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

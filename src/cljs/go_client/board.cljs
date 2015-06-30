@@ -34,8 +34,8 @@
                  (str "line-" line)
                  (str "column-" column)]))
      {:on-mouse-over #(if (game/playable-vertex? @game vertex)
-                         (set-vertex-as-playable vertex-data vertex)
-                         (set-vertex-as-non-playable vertex-data vertex))}]))
+                       (set-vertex-as-playable vertex-data vertex)
+                       (set-vertex-as-non-playable vertex-data vertex))}]))
 
 (defn- render-playable-stone
   [game vertex]

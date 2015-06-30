@@ -1,54 +1,16 @@
 (ns go-client.core
-    (:require [reagent.core :as reagent :refer [atom]]
-              [reagent.session :as session]
-              [secretary.core :as secretary :include-macros true]
-              [goog.events :as events]
-              [goog.history.EventType :as EventType]
-              [cljsjs.react :as react]
-              [go-client.board :as board]
-              [go-client.app :as app])
-    (:import goog.History))
+    (:require [reagent.core :as reagent]
+              [re-frame.core :as re-frame]
+              [go-client.handlers]
+              [go-client.subs]
+              [go-client.routes :as routes]
+              [go-client.views :as views]))
 
-;; -------------------------
-;; Views
-
-(defn board []
-  [:div #_[:a {:href "#/about"} "go to about page"]
-   [board/render-game app/game]])
-
-(defn about-page []
-  [:div
-   [:a {:href "#/"} "go to the home page"]])
-
-(defn current-page []
-  [:div [(session/get :current-page)]])
-
-;; -------------------------
-;; Routes
-(secretary/set-config! :prefix "#")
-
-(secretary/defroute "/" []
-  (session/put! :current-page #'board))
-
-(secretary/defroute "/about" []
-  (session/put! :current-page #'about-page))
-
-;; -------------------------
-;; History
-;; must be called after routes have been defined
-(defn hook-browser-navigation! []
-  (doto (History.)
-    (events/listen
-     EventType/NAVIGATE
-     (fn [event]
-       (secretary/dispatch! (.-token event))))
-    (.setEnabled true)))
-
-;; -------------------------
-;; Initialize app
 (defn mount-root []
-  (reagent/render [current-page] (.getElementById js/document "app")))
+  (reagent/render [views/main-panel]
+                  (.getElementById js/document "app")))
 
-(defn init! []
-  (hook-browser-navigation!)
+(defn ^:export init [] 
+  (routes/app-routes)
+  (re-frame/dispatch-sync [:initialize-db])
   (mount-root))
