@@ -12,8 +12,8 @@
     background-size: 100% 100%;
     background-color:#FFDD88;
     display: block;
-    width: 550px;
-    height: 550px;
+    width: 450px;
+    height: 450px;
     box-shadow: 2px 2px 10px rgba(0,0,0,0.6);
     position: relative;
 }

@@ -1,17 +1,17 @@
 (ns go-client.routes
-    (:require-macros [secretary.core :refer [defroute]])
-    (:import goog.History)
-    (:require [secretary.core :as secretary]
-              [goog.events :as events]
-              [goog.history.EventType :as EventType]
-              [re-frame.core :as re-frame]))
+  (:require-macros [secretary.core :refer [defroute]])
+  (:import goog.History)
+  (:require [secretary.core :as secretary]
+            [goog.events :as events]
+            [goog.history.EventType :as EventType]
+            [re-frame.core :as re-frame]))
 
 (defn hook-browser-navigation! []
   (doto (History.)
     (events/listen
-     EventType/NAVIGATE
-     (fn [event]
-       (secretary/dispatch! (.-token event))))
+      EventType/NAVIGATE
+      (fn [event]
+        (secretary/dispatch! (.-token event))))
     (.setEnabled true)))
 
 (defn app-routes []
@@ -19,13 +19,14 @@
   ;; --------------------
   ;; define routes here
   (defroute "/" []
-    (re-frame/dispatch [:set-active-panel :home-panel]))
+            (re-frame/dispatch [:set-active-panel :home-panel]))
 
   (defroute "/about" []
-    (re-frame/dispatch [:set-active-panel :about-panel]))
+            (re-frame/dispatch [:set-active-panel :about-panel]))
 
-  (defroute "/current-game" []
-    (re-frame/dispatch [:set-active-panel :current-game-panel]))
+  (defroute "/game/:game-id" [game-id]
+            (re-frame/dispatch [:set-active-game game-id])
+            (re-frame/dispatch [:set-active-panel :game-panel]))
 
   ;; --------------------
   (hook-browser-navigation!))

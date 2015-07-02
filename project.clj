@@ -9,6 +9,8 @@
                            [re-frame "0.4.1"]
                            [re-com "0.5.4"]
                            [secretary "1.2.3"]
+                           [com.taoensso/sente "1.5.0"]
+                           [com.taoensso/timbre "3.4.0"]
                            [org.clojars.ludug3r0/go-schema "0.0.4-SNAPSHOT"]
                            [org.clojars.ludug3r0/go-rules "0.0.2-SNAPSHOT"]]
 

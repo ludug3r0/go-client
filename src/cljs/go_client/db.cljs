@@ -21,5 +21,7 @@
                             [:white [3 17]]
                             [:black [3 14]]
                             [:white [6 15]]]]
-    {:name         "re-frame"
-     :current-game ear-reddening-game}))
+    {:name  "re-frame"
+     :server-connected? false
+     :active-game nil
+     :games {"abcdef" ear-reddening-game}}))

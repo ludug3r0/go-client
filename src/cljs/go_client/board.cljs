@@ -70,11 +70,8 @@
      [render-playable-stone game vertex])])
 
 (defn render-game
-  [game]
-  (let [placed-stones (game/configuration @game)
-        vertex-data (atom {:empty    (set (game/empty-vertices @game))
-                           :playable (set [])})]
-    [:div.board
-     [render-placed-stones placed-stones]
-     [render-empty-vertices game vertex-data]
-     [render-playable-vertices game vertex-data]]))
+  [game-id placed-stones empty-vertices]
+  ;; TODO insert back hover functionality
+  [:div.board
+   [render-placed-stones placed-stones]
+   #_[render-empty-vertices game-id empty-vertices]])
