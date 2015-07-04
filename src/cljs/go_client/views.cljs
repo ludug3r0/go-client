@@ -71,10 +71,11 @@
 
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])
-        connected? (re-frame/subscribe [:server-connected?])]
+        server-state (re-frame/subscribe [:server-state])]
     (fn []
       [re-com/v-box
        :height "100%"
-       :children [[:p (if @connected? ":)" ":(")]
-                  [:p {:on-click #(re-frame/dispatch [:send-to-server [:util/echo "test"]])} "test"]
+       :children [[:p (pr-str @server-state)]
+                  [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "test"]])} "test"]
+                  [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "connect"]
                   (panels @active-panel)]])))

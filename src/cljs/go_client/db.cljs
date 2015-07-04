@@ -22,6 +22,6 @@
                             [:black [3 14]]
                             [:white [6 15]]]]
     {:name  "re-frame"
-     :server-connected? false
+     :server-state {:type nil :open? nil :uid nil :csrf-token nil}
      :active-game nil
      :games {"abcdef" ear-reddening-game}}))

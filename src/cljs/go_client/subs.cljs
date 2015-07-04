@@ -10,9 +10,9 @@
 
 
 (re-frame/register-sub
-  :server-connected?
+  :server-state
   (fn [db]
-    (reaction (:server-connected? @db))))
+    (reaction (:server-state @db))))
 
 (re-frame/register-sub
   :game-stones

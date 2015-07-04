@@ -13,5 +13,7 @@
 (defn ^:export init [] 
   (routes/app-routes)
   (re-frame/dispatch-sync [:initialize-db])
-  (re-frame/dispatch-sync [:register-to-server])
-  (mount-root))
+  (mount-root)
+  (re-frame/dispatch [:connect-to-server])
+  ;(re-frame/dispatch [:log-into-server "rafael"])
+  )
