@@ -2,6 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [go-client.db :as db]))
 
+
 (re-frame/register-handler
   :initialize-db
   (fn [_ _]

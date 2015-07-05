@@ -22,16 +22,29 @@
   (fn [db]
     (let [game-id (reaction (:active-game @db))]
       (reaction
-        (let [game (get-in @db [:games @game-id])]
-          (if game
-            (game/configuration game)
+        (let [game-moves (get-in @db [:games @game-id :moves])]
+          (if game-moves
+            (game/configuration game-moves)
             #{}))))))
+
+(re-frame/register-sub
+  :game-list
+  (fn [db]
+    (reaction (:games @db))))
 
 (re-frame/register-sub
   :active-game-id
   (fn [db]
     (reaction
       (:active-game @db))))
+
+(re-frame/register-sub
+  :active-game-title
+  (let [active-game-id (re-frame/subscribe [:active-game-id])]
+    (fn [db]
+      (reaction
+        (get-in @db [:games @active-game-id :title])))))
+
 
 (re-frame/register-sub
   :active-panel
