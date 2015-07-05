@@ -12,7 +12,10 @@
 (re-frame/register-sub
   :server-state
   (fn [db]
-    (reaction (:server-state @db))))
+    (reaction {:connected?  (-> @db :server :open?)
+               :logged-user (if (-> @db :server :uid string?)
+                              (-> @db :server :uid)
+                              nil)})))
 
 (re-frame/register-sub
   :game-stones

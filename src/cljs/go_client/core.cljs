@@ -1,7 +1,7 @@
 (ns go-client.core
     (:require [reagent.core :as reagent]
               [re-frame.core :as re-frame]
-              [go-client.handlers]
+              [go-client.handlers.core]
               [go-client.subs]
               [go-client.routes :as routes]
               [go-client.views :as views]))
@@ -14,6 +14,4 @@
   (routes/app-routes)
   (re-frame/dispatch-sync [:initialize-db])
   (mount-root)
-  (re-frame/dispatch [:connect-to-server])
-  ;(re-frame/dispatch [:log-into-server "rafael"])
-  )
+  (re-frame/dispatch-sync [:connect-to-server]))

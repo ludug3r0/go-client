@@ -41,19 +41,26 @@
 
 
 (defn login! [ring-request]
-  (prn ring-request)
   (let [{:keys [session params]} ring-request
         {:keys [user-id]} params]
     (debugf "Login request: %s" params)
     {:status 200 :session (assoc session :uid user-id)}))
 
+(defn logout! [ring-request]
+  (let [{:keys [session params]} ring-request]
+    (debugf "Logout request: %s" params)
+    {:status 200 :session (dissoc session :uid)}))
+
 (defroutes my-app-routes
            (GET "/chsk" req (ring-ajax-get-or-ws-handshake req))
            (POST "/chsk" req (ring-ajax-post req))
+
            (GET "/csrf-token" req (-> (ring.util.response/response (pr-str {:csrf-token *anti-forgery-token*}))
                                       (ring.util.response/header "csrf-token" *anti-forgery-token*)
                                       (ring.util.response/content-type "application/edn")))
+           (POST "/logout" req (logout! req))
            (POST "/login" req (login! req))
+
            (route/resources "/"))
 
 (def my-app
@@ -62,12 +69,6 @@
             (assoc-in [:security :anti-forgery] {:read-token (fn [req] (-> req :params :csrf-token))}))]
     (-> (reload/wrap-reload #'my-app-routes)
         (ring.middleware.defaults/wrap-defaults ring-defaults-config))))
-
-
-
-
-
-
 
 ;; entry point
 (defn -main [& args]

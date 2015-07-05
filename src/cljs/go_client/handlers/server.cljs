@@ -1,8 +1,7 @@
-(ns go-client.handlers
+(ns go-client.handlers.server
   (:require-macros
     [cljs.core.async.macros :as asyncm :refer (go go-loop)])
   (:require [re-frame.core :as re-frame]
-            [go-client.db :as db]
             [cljs.core.async :as async :refer (<! >! put! chan)]
             [taoensso.sente :as sente :refer [cb-success?]]
             [taoensso.encore :as encore :refer [tracef infof debugf]]))
@@ -10,21 +9,18 @@
 (re-frame/register-handler
   :server-event
   (fn [db [_ payload]]
-    ;;TODO: handle server events
-    ;(infof (pr-str (:event payload)))
+    ;;TODO: handle go_client.handlers events
+    (infof (pr-str (:event payload)))
     db))
 
+;; set-go_client.handlers-state handler
 (re-frame/register-handler
-  :unset-server-handlers
-  (fn [db _]
-
-    db))
-
-(re-frame/register-handler
-  :set-server-handlers
-  (fn [db [_ ch-recv send-fn state chsk]]
-
-    db))
+  :set-server-state
+  (fn [db [_ state]]
+    (debugf (pr-str state))
+    (let [{:keys [open? uid]} state]
+      (assoc db :server {:open? open?
+                         :uid uid}))))
 
 (re-frame/register-handler
   :connect-to-server
@@ -35,7 +31,7 @@
       (fn [ajax-resp]
         (if (= (:?status ajax-resp) 200)
           (let [{:keys [ch-recv send-fn state chsk]} (sente/make-channel-socket! "/chsk")]
-            ;; log user into server
+            ;; log user into go_client.handlers
             (re-frame/register-handler
               :log-into-server
               (fn [db [_ user-id]]
@@ -45,7 +41,6 @@
                    :params {:user-id    user-id
                             :csrf-token (:csrf-token @state)}}
                   (fn [ajax-resp]
-                    (debugf "Ajax login POST response: %s" ajax-resp)
                     (let [login-successful? (= (:?status ajax-resp) 200)]
                       (if-not login-successful?
                         (debugf "Login failed")
@@ -54,7 +49,23 @@
                           (sente/chsk-reconnect! chsk))))))
                 db))
 
-            ;; send events to server
+            (re-frame/register-handler
+              :logout-from-server
+              (fn [db [_ user-id]]
+                (sente/ajax-call
+                  "/logout"
+                  {:method :post
+                   :params {:csrf-token (:csrf-token @state)}}
+                  (fn [ajax-resp]
+                    (let [logout-successful? (= (:?status ajax-resp) 200)]
+                      (if-not logout-successful?
+                        (debugf "Logout failed")
+                        (do
+                          (debugf "Logout successful")
+                          (sente/chsk-reconnect! chsk))))))
+                db))
+
+            ;; send events to go_client.handlers
             (re-frame/register-handler
               :send-event-to-server
               (fn [db [_ server-v]]
@@ -65,40 +76,16 @@
                              (infof (pr-str edn-reply " - " server-v)))))
                 db))
 
-            ;; setting up server-state-watcher
+            ;; setting up go_client.handlers-state-watcher
             (add-watch state :server-state-watcher
                        (fn [k r o n]
                          (when (not= o n)
-                           ;;server connection state changed
+                           ;;go_client.handlers connection state changed
                            (re-frame/dispatch [:set-server-state n]))))
 
-            ;; listening for server pushes
+            ;; listening for go_client.handlers pushes
             (go-loop [pushed-message (<! ch-recv)]
                      (re-frame/dispatch-sync [:server-event pushed-message])
-                     (recur (<! ch-recv)))
-            )
-          )
-        ))
+                     (recur (<! ch-recv)))))))
 
     db))
-
-(re-frame/register-handler
-  :initialize-db
-  (fn [_ _]
-    db/default-db))
-
-;; set-server-state handler
-(re-frame/register-handler
-  :set-server-state
-  (fn [db [_ state]]
-    (assoc db :server-state state)))
-
-(re-frame/register-handler
-  :set-active-panel
-  (fn [db [_ active-panel]]
-    (assoc db :active-panel active-panel)))
-
-(re-frame/register-handler
-  :set-active-game
-  (fn [db [_ active-game]]
-    (assoc db :active-game active-game)))

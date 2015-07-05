@@ -69,13 +69,22 @@
 (defmethod panels :game-panel [] [game-panel])
 (defmethod panels :default [] [:div])
 
+
+(defn state-panel [{:keys [connected? logged-user]}]
+  [re-com/v-box
+   :children [[:p (str "connected to server: " (if connected? "Y" "N"))]
+              [:p (str "user: " (or logged-user "N/A"))]]]
+  )
+
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])
         server-state (re-frame/subscribe [:server-state])]
     (fn []
       [re-com/v-box
        :height "100%"
-       :children [[:p (pr-str @server-state)]
-                  [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "test"]])} "test"]
-                  [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "connect"]
+       :children [[state-panel @server-state]
+                  [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
+                  [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
+                  [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]
+
                   (panels @active-panel)]])))

@@ -4,7 +4,7 @@
             :license {:name "Eclipse Public License"
                       :url  "http://www.eclipse.org/legal/epl-v10.html"}
             :dependencies [
-                           ;; server side dependencies
+                           ;; go_client.handlers side dependencies
                            [org.clojure/clojure "1.6.0"]
                            [http-kit "2.1.18"]
                            [ring/ring-devel "1.1.8"]
@@ -21,7 +21,7 @@
                            [org.clojars.ludug3r0/go-schema "0.0.4-SNAPSHOT"]
                            [org.clojars.ludug3r0/go-rules "0.0.2-SNAPSHOT"]
 
-                           ;; server and client side dependencies
+                           ;; go_client.handlers and client side dependencies
                            [com.taoensso/sente "1.5.0"]
                            [com.taoensso/timbre "3.4.0"]]
 
