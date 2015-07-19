@@ -31,7 +31,6 @@
       (fn [ajax-resp]
         (if (= (:?status ajax-resp) 200)
           (let [{:keys [ch-recv send-fn state chsk]} (sente/make-channel-socket! "/chsk")]
-            ;; log user into go_client.handlers
             (re-frame/register-handler
               :log-into-server
               (fn [db [_ user-id]]
@@ -48,7 +47,6 @@
                           (debugf "Login successful")
                           (sente/chsk-reconnect! chsk))))))
                 db))
-
             (re-frame/register-handler
               :logout-from-server
               (fn [db [_ user-id]]
@@ -64,8 +62,6 @@
                           (debugf "Logout successful")
                           (sente/chsk-reconnect! chsk))))))
                 db))
-
-            ;; send events to go_client.handlers
             (re-frame/register-handler
               :send-event-to-server
               (fn [db [_ server-v]]
@@ -75,15 +71,12 @@
                            (when-not (cb-success? edn-reply)
                              (infof (pr-str edn-reply " - " server-v)))))
                 db))
-
-            ;; setting up go_client.handlers-state-watcher
             (add-watch state :server-state-watcher
                        (fn [k r o n]
                          (when (not= o n)
                            ;;go_client.handlers connection state changed
                            (re-frame/dispatch [:set-server-state n]))))
 
-            ;; listening for go_client.handlers pushes
             (go-loop [pushed-message (<! ch-recv)]
                      (re-frame/dispatch-sync [:server-event pushed-message])
                      (recur (<! ch-recv)))))))
