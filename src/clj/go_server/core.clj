@@ -18,7 +18,7 @@
     [clojure.core.async :as async :refer (<! >! put! chan)]
     ))
 
-;;TODO: improve how we bind up these channels and handlers
+;;TODO #5: improve how we bind up these channels and handlers
 (let [{:keys [ch-recv send-fn ajax-post-fn ajax-get-or-ws-handshake-fn
               connected-uids]}
       (sente/make-channel-socket! sente-web-server-adapter {})]
@@ -29,6 +29,7 @@
   (def connected-uids connected-uids)                       ; Watchable, read-only atom
   )
 
+;;TODO #5: extract this to a proper server handler namespace/package
 (async/go-loop [event-msg (<! ch-chsk)]
   ;; handle events
   (condp :id event-msg
@@ -39,7 +40,7 @@
     (reply-fn :ack))
   (recur (<! ch-chsk)))
 
-
+;;TODO #4: proper login logic
 (defn login! [ring-request]
   (let [{:keys [session params]} ring-request
         {:keys [user-id]} params]
@@ -71,6 +72,7 @@
         (ring.middleware.defaults/wrap-defaults ring-defaults-config))))
 
 ;; entry point
+;;TODO #6: add settings module
 (defn -main [& args]
   (run-server my-app {:port 8080}))
 
