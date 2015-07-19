@@ -1,3 +1,4 @@
+[![Build Status](https://snap-ci.com/ludug3r0/go-client/branch/master/build_image)](https://snap-ci.com/ludug3r0/go-client/branch/master)
 # go-client
 
 A Clojure & ClojureScript client for playing the Game of Go
