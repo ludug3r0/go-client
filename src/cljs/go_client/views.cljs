@@ -75,20 +75,20 @@
    :label (str "Game: " game-title)
    :level :level1])
 
-(defn game-board [game-id placed-stones empty-vertices]
-  [board/render-game game-id placed-stones empty-vertices])
+(defn game-board [game-id placed-stones empty-vertices playable-vertices]
+  [board/render-game game-id placed-stones empty-vertices playable-vertices])
 
 (defn game-panel []
   (let [game-id (re-frame/subscribe [:active-game-id])
-        game-title (re-frame/subscribe [:active-game-title])
-        placed-stones (re-frame/subscribe [:game-stones])
-        ;;empty-vertices (re-frame/subscribe [:empty-vertices game-id])
-        ]
+        game-title (re-frame/subscribe [:game-title @game-id])
+        placed-stones (re-frame/subscribe [:game-stones @game-id])
+        empty-vertices (re-frame/subscribe [:empty-vertices @game-id])
+        playable-stones (re-frame/subscribe [:playable-stones @game-id])]
     (fn []
       [re-com/v-box
        :gap "1em"
        :children [[current-game-title @game-title]
-                  [game-board @game-id @placed-stones []]
+                  [game-board @game-id @placed-stones @empty-vertices @playable-stones]
                   [link-to-home-page]]])))
 
 ;; --------------------

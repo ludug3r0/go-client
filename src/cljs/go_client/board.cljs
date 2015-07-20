@@ -1,6 +1,6 @@
 (ns go-client.board
-  (:require [go.game :as game]
-            [reagent.core :refer [atom]]))
+  (:require [reagent.core :refer [atom]]
+            [re-frame.core :as re-frame]))
 
 (defn- render-stone
   [stone]
@@ -16,15 +16,8 @@
                  (str "line-" line)
                  (str "column-" column)]))]))
 
-(defn- set-vertex-as-playable [vertex-data vertex]
-  (swap! vertex-data update-in [:empty] disj vertex)
-  (swap! vertex-data update-in [:playable] conj vertex))
-
-(defn- set-vertex-as-non-playable [vertex-data vertex]
-  (swap! vertex-data update-in [:empty] disj vertex))
-
 (defn- render-vertex
-  [game vertex-data vertex]
+  [game-id vertex]
   (let [line (-> vertex first str)
         column (-> vertex second str)]
     [(keyword (clojure.string/join
@@ -33,23 +26,22 @@
                  "vertex"
                  (str "line-" line)
                  (str "column-" column)]))
-     {:on-mouse-over #(if (game/playable-vertex? @game vertex)
-                       (set-vertex-as-playable vertex-data vertex)
-                       (set-vertex-as-non-playable vertex-data vertex))}]))
+     {:on-mouse-over #(re-frame/dispatch [:resolve-vertex game-id vertex])}]))
 
-(defn- render-playable-stone
-  [game vertex]
-  (let [current-player (-> @game game/current-player-color name)
-        line (-> vertex first str)
-        column (-> vertex second str)]
+(defn- render-ghost-stone
+  [game-id stone]
+  (let [color (-> stone first name)
+        coordinates (-> stone second)
+        line (-> coordinates first str)
+        column (-> coordinates second str)]
     [(keyword (clojure.string/join
                 "."
                 ["div"
                  "placement"
-                 current-player
+                 color
                  (str "line-" line)
                  (str "column-" column)]))
-     {:on-click #(swap! game game/occupy-vertex vertex)}]))
+     {:on-click #(re-frame/dispatch [:occupy-vertex game-id stone])}]))
 
 (defn- render-placed-stones [stones]
   [:div
@@ -57,21 +49,21 @@
      ^{:key (second stone)}
      [render-stone stone])])
 
-(defn- render-empty-vertices [game vertex-data]
+(defn- render-empty-vertices [game-id vertices]
   [:div
-   (for [vertex (:empty @vertex-data)]
+   (for [vertex vertices]
      ^{:key vertex}
-     [render-vertex game vertex-data vertex])])
+     [render-vertex game-id vertex])])
 
-(defn- render-playable-vertices [game vertex-data]
+(defn- render-playable-stones [game-id stones]
   [:div
-   (for [vertex (:playable @vertex-data)]
-     ^{:key vertex}
-     [render-playable-stone game vertex])])
+   (for [stone stones]
+     ^{:key stone}
+     [render-ghost-stone game-id stone])])
 
 (defn render-game
-  [game-id placed-stones empty-vertices]
-  ;; TODO insert back hover functionality
+  [game-id placed-stones empty-vertices playable-stones]
   [:div.board
    [render-placed-stones placed-stones]
-   #_[render-empty-vertices game-id empty-vertices]])
+   [render-empty-vertices game-id empty-vertices]
+   [render-playable-stones game-id playable-stones]])

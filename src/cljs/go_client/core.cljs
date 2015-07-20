@@ -14,4 +14,4 @@
   (routes/app-routes)
   (re-frame/dispatch-sync [:initialize-db])
   (mount-root)
-  (re-frame/dispatch-sync [:connect-to-server]))
+  (re-frame/dispatch [:connect-to-server]))

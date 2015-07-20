@@ -1,4 +1,5 @@
-(ns go-client.db)
+(ns go-client.db
+  (:require [go.game :as game]))
 
 (def default-db
   (let [ear-reddening-game [[:black [16 17]]
@@ -24,5 +25,7 @@
     {:name         "re-frame"
      :server-state {:type nil :open? nil :uid nil :csrf-token nil}
      :active-game  nil
-     :games        {"abcdef" {:title "Ear reddening Game"
-                              :moves ear-reddening-game}}}))
+     :games        {"abcdef" {:title           "Ear reddening Game"
+                              :moves           ear-reddening-game
+                              :empty-vertices  (set (game/empty-vertices ear-reddening-game))
+                              :playable-stones (set [[:black [1 1]]])}}}))

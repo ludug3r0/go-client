@@ -18,6 +18,8 @@
     [clojure.core.async :as async :refer (<! >! put! chan)]
     ))
 
+(defonce db (atom {}))
+
 ;;TODO #5: improve how we bind up these channels and handlers
 (let [{:keys [ch-recv send-fn ajax-post-fn ajax-get-or-ws-handshake-fn
               connected-uids]}
