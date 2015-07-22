@@ -20,6 +20,7 @@
                            [secretary "1.2.3"]
                            [org.clojars.ludug3r0/go-schema "0.0.4-SNAPSHOT"]
                            [org.clojars.ludug3r0/go-rules "0.0.2-SNAPSHOT"]
+                           [prismatic/schema "0.4.3"]
 
                            ;; go_client.handlers and client side dependencies
                            [com.taoensso/sente "1.5.0"]

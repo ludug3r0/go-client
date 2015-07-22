@@ -4,7 +4,8 @@
               [go-client.handlers.core]
               [go-client.subs]
               [go-client.routes :as routes]
-              [go-client.views :as views]))
+              [go-client.views :as views]
+              [go-client.db :as db]))
 
 (defn mount-root []
   (reagent/render [views/main-panel]
@@ -13,5 +14,6 @@
 (defn ^:export init [] 
   (routes/app-routes)
   (re-frame/dispatch-sync [:initialize-db])
+  (re-frame/dispatch-sync [:attach-schema-validator db/db-schema])
   (mount-root)
   (re-frame/dispatch [:connect-to-server]))

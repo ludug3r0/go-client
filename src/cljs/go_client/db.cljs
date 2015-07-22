@@ -1,5 +1,18 @@
 (ns go-client.db
-  (:require [go.game :as game]))
+  (:require [go.game :as game]
+            [go.schema :as go-schema]
+            [schema.core :as s :include-macros true]))
+
+(s/defschema db-schema
+  {:name         s/Str
+   :active-game  (s/maybe s/Str)
+   :active-panel (s/maybe (s/enum :home-panel :about-panel :game-list :game-panel))
+   :games        {s/Str {:title           s/Str
+                         :moves           go-schema/game
+                         :empty-vertices  #{go-schema/vertex}
+                         :playable-stones #{go-schema/move}}}
+   :server       {:open? s/Bool
+                  :uid   (s/maybe (s/either js/Object s/Str))}})
 
 (def default-db
   (let [ear-reddening-game [[:black [16 17]]
@@ -22,10 +35,12 @@
                             [:white [3 17]]
                             [:black [3 14]]
                             [:white [6 15]]]]
-    {:name         "re-frame"
-     :server-state {:type nil :open? nil :uid nil :csrf-token nil}
-     :active-game  nil
-     :games        {"abcdef" {:title           "Ear reddening Game"
-                              :moves           ear-reddening-game
-                              :empty-vertices  (set (game/empty-vertices ear-reddening-game))
-                              :playable-stones (set [[:black [1 1]]])}}}))
+    {:name        "re-frame"
+     :active-game nil
+     :active-panel :home-panel
+     :games       {"abcdef" {:title           "Ear reddening Game"
+                             :moves           ear-reddening-game
+                             :empty-vertices  (set (game/empty-vertices ear-reddening-game))
+                             :playable-stones (set [[:black [1 1]]])}}
+     :server      {:open? false
+                   :uid   nil}}))
