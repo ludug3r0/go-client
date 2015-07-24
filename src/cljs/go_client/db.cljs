@@ -12,7 +12,7 @@
                          :empty-vertices  #{go-schema/vertex}
                          :playable-stones #{go-schema/move}}}
    :server       {:open? s/Bool
-                  :uid   (s/maybe (s/either js/Object s/Str))}})
+                  :uid   (s/either (s/eq :taoensso.sente/nil-uid) s/Str)}})
 
 (def default-db
   (let [ear-reddening-game [[:black [16 17]]
@@ -43,4 +43,4 @@
                              :empty-vertices  (set (game/empty-vertices ear-reddening-game))
                              :playable-stones (set [[:black [1 1]]])}}
      :server      {:open? false
-                   :uid   nil}}))
+                   :uid   :taoensso.sente/nil-uid}}))
