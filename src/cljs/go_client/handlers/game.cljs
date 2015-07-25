@@ -3,15 +3,15 @@
             [taoensso.encore :as encore]
             [go.game :as game]))
 
-(re-frame/register-handler
-  :create-game
-  (fn [db [_ title]]
-    (let [uuid (encore/uuid-str)
-          starting-moves []]
-      (assoc-in db [:games uuid] {:title           title
-                                  :moves           starting-moves
-                                  :empty-vertices  (set (game/empty-vertices starting-moves))
-                                  :playable-stones (set [])}))))
+(defn create-game [db [title]]
+  (let [uuid (encore/uuid-str)
+        starting-moves []]
+    (assoc-in db [:games uuid] {:title           title
+                                :moves           starting-moves
+                                :empty-vertices  (set (game/empty-vertices starting-moves))
+                                :playable-stones (set [])})))
+
+(re-frame/register-handler :create-game re-frame/trim-v create-game)
 
 (re-frame/register-handler
   :resolve-vertex
