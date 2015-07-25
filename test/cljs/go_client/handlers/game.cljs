@@ -6,4 +6,5 @@
 (deftest testing-the-test
          (is (= true true)))
 
-
+(deftest testing-the-failing-test
+         (is (= false true)))
