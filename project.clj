@@ -26,29 +26,39 @@
                            [com.taoensso/sente "1.5.0"]
                            [com.taoensso/timbre "3.4.0"]]
 
-            :source-paths ["src/clj"]
-
             :plugins [[lein-cljsbuild "1.0.6"]
-                      [lein-figwheel "0.3.3" :exclusions [cider/cider-nrepl]]]
+                      [lein-figwheel "0.3.3" :exclusions [cider/cider-nrepl]]
+                      [com.cemerick/clojurescript.test "0.3.3"]]
 
             :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
-
+            :source-paths ["src/clj" "src/cljs"]
+            :test-paths ["test/cljs"]
+            :hooks [leiningen.cljsbuild]
             :figwheel {:ring-handler go-server.core/my-app}
 
-            :cljsbuild {:builds [{:id           "dev"
-                                  :source-paths ["src/cljs"]
+            :cljsbuild {:builds        [{:id           "dev"
+                                         :source-paths ["src/cljs"]
 
-                                  :figwheel     {:on-jsload "go-client.core/mount-root"}
+                                         :figwheel     {:on-jsload "go-client.core/mount-root"}
 
-                                  :compiler     {:main                 go-client.core
-                                                 :output-to            "resources/public/js/compiled/app.js"
-                                                 :output-dir           "resources/public/js/compiled/out"
-                                                 :asset-path           "js/compiled/out"
-                                                 :source-map-timestamp true}}
+                                         :compiler     {:main                 go-client.core
+                                                        :output-to            "resources/public/js/compiled/app.js"
+                                                        :output-dir           "resources/public/js/compiled/out"
+                                                        :asset-path           "js/compiled/out"
+                                                        :source-map-timestamp true}}
 
-                                 {:id           "min"
-                                  :source-paths ["src/cljs"]
-                                  :compiler     {:main          go-client.core
-                                                 :output-to     "resources/public/js/compiled/app.js"
-                                                 :optimizations :advanced
-                                                 :pretty-print  false}}]})
+                                        {:id       "test"
+                                         :source-paths ["test/cljs"]
+                                         :compiler {:output-to     "resources/public/js/compiled/tests.js"
+                                                    :optimizations :whitespace}}
+
+
+
+                                        {:id       "min" :source-paths ["src/cljs"]
+                                         :compiler {:main          go-client.core
+                                                    :output-to     "resources/public/js/compiled/app.js"
+                                                    :optimizations :advanced
+                                                    :pretty-print  false}}]
+                        :test-commands {"unit-tests" ["phantomjs" :runner
+                                                      "resources/public/js/compiled/app.js"
+                                                      "resources/public/js/compiled/tests.js"]}})

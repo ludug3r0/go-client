@@ -103,8 +103,7 @@
 (defn state-panel [{:keys [connected? logged-user]}]
   [re-com/v-box
    :children [[:p (str "connected to server: " (if connected? "Y" "N"))]
-              [:p (str "user: " (or logged-user "N/A"))]]]
-  )
+              [:p (str "user: " (or logged-user "N/A"))]]])
 
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])
@@ -116,6 +115,6 @@
                   [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
                   [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
                   [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]
-                  [:p {:on-click #(re-frame/dispatch [:create-game "New Game"])} "create new game"]
+                  [:p {:on-click #(re-frame/dispatch [:create-game "New Game"])} "Create a new game"]
 
                   (panels @active-panel)]])))
