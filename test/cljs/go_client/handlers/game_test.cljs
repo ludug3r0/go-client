@@ -6,9 +6,9 @@
 
 (def starting-db db/default-db)
 
-(deftest create-game-creates-a-new-game
+(deftest creating-a-new-game
          (let [starting-number-of-games (count (:games starting-db))
                expected-number-of-games (inc starting-number-of-games)
-               changed-db (game/create-game starting-db [:foo "title"])]
+               changed-db (game/create-game starting-db ["title"])]
            (is (= expected-number-of-games (count (:games changed-db))))))
 
