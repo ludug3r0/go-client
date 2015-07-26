@@ -21,15 +21,10 @@
    :label "go to About Page"
    :href "#/about"])
 
-(defn link-to-current-game []
-  [re-com/hyperlink-href
-   :label "go to Current Game"
-   :href "#/games/abcdef"])
-
 (defn home-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[home-title] [link-to-game-list] [link-to-about-page] [link-to-current-game]]])
+   :children [[home-title] [link-to-game-list] [link-to-about-page]]])
 
 ;; --------------------
 (defn about-title []
