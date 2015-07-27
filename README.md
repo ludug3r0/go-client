@@ -14,11 +14,27 @@ Figwheel will automatically push cljs changes to the browser.
 
 Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
 
+### Runnings tests
+```
+lein test
+```
+
+### Runnig auto tests
+```
+lein cljsbuild auto auto-test
+```
+
 ## Production Build
 
 ```
 lein clean
 lein cljsbuild once min
+lein uberjar
+```
+
+### Running
+```
+java -cp target/go-client-0.2.0-SNAPSHOT-standalone.jar clojure.main -m go-server.core
 ```
 
 ## License
