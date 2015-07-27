@@ -52,6 +52,15 @@
                                          :compiler {:output-to     "resources/public/js/compiled/tests.js"
                                                     :optimizations :whitespace}}
 
+                                        {:id       "auto-test"
+                                         :source-paths ["src/cljs" "test/cljs"]
+                                         :notify-command ["phantomjs"
+                                                          :cljs.test/runner
+                                                          "resources/public/js/compiled/app.js"
+                                                          "resources/public/js/compiled/tests.js"]
+                                         :compiler {:output-to     "resources/public/js/compiled/tests.js"
+                                                    :optimizations :whitespace}}
+
 
 
                                         {:id       "min" :source-paths ["src/cljs"]
@@ -59,6 +68,7 @@
                                                     :output-to     "resources/public/js/compiled/app.js"
                                                     :optimizations :advanced
                                                     :pretty-print  false}}]
-                        :test-commands {"unit-tests" ["phantomjs" :runner
+                        :test-commands {"unit-tests" ["phantomjs"
+                                                      :cljs.test/runner
                                                       "resources/public/js/compiled/app.js"
                                                       "resources/public/js/compiled/tests.js"]}})
