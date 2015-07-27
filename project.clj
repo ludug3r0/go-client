@@ -56,9 +56,8 @@
                                          :source-paths ["src/cljs" "test/cljs"]
                                          :notify-command ["phantomjs"
                                                           :cljs.test/runner
-                                                          "resources/public/js/compiled/app.js"
-                                                          "resources/public/js/compiled/tests.js"]
-                                         :compiler {:output-to     "resources/public/js/compiled/tests.js"
+                                                          "resources/public/js/compiled/auto-test.js"]
+                                         :compiler {:output-to     "resources/public/js/compiled/auto-test.js"
                                                     :optimizations :whitespace}}
 
 
