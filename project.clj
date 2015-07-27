@@ -32,6 +32,7 @@
 
             :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
             :source-paths ["src/clj" "src/cljs"]
+            :resources-path "resources/public"
             :test-paths ["test/cljs"]
             :hooks [leiningen.cljsbuild]
             :figwheel {:ring-handler go-server.core/my-app}

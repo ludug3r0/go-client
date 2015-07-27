@@ -55,6 +55,8 @@
     {:status 200 :session (dissoc session :uid)}))
 
 (defroutes my-app-routes
+           (GET "/" [] (-> (ring.util.response/resource-response "index.html" {:root "public"})
+                           (ring.util.response/content-type "text/html")))
            (GET "/chsk" req (ring-ajax-get-or-ws-handshake req))
            (POST "/chsk" req (ring-ajax-post req))
 
@@ -64,7 +66,8 @@
            (POST "/logout" req (logout! req))
            (POST "/login" req (login! req))
 
-           (route/resources "/"))
+           (route/resources "/")
+           (route/not-found "Page not found..."))
 
 (def my-app
   (let [ring-defaults-config
