@@ -106,6 +106,10 @@
    {:id :game-list :label "Game List"}
    {:id :game-panel :label "Game"}])
 
+(defn header []
+  (let [server-state (re-frame/subscribe [:server-state])]
+    (fn [] [state-panel @server-state])))
+
 (defn tabs []
   (let [selected-panel (re-frame/subscribe [:active-panel])]
     [re-com/horizontal-tabs
