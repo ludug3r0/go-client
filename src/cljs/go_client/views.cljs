@@ -11,20 +11,10 @@
        :label (str "Hello from " @name ". This is the Home Page.")
        :level :level1])))
 
-(defn link-to-game-list []
-  [re-com/hyperlink-href
-   :label "go to Game List"
-   :href "#/games"])
-
-(defn link-to-about-page []
-  [re-com/hyperlink-href
-   :label "go to About Page"
-   :href "#/about"])
-
 (defn home-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[home-title] [link-to-game-list] [link-to-about-page]]])
+   :children [[home-title]]])
 
 ;; --------------------
 (defn about-title []
@@ -40,7 +30,7 @@
 (defn about-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[about-title] [link-to-home-page]]])
+   :children [[about-title]]])
 
 ;; --------------------
 (defn game-list-title []
@@ -62,7 +52,9 @@
 (defn game-list-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[game-list-title] [game-list] [link-to-home-page]]])
+   :children [[game-list-title]
+              [:p {:on-click #(re-frame/dispatch [:create-game "New Game"])} "Create a new game"]
+              [game-list]]])
 
 ;; --------------------
 (defn current-game-title [game-title]
@@ -100,16 +92,33 @@
    :children [[:p (str "connected to server: " (if connected? "Y" "N"))]
               [:p (str "user: " (or logged-user "N/A"))]]])
 
+(def tabs-definition
+  [
+   {:id :home-panel :label "Home"}
+   {:id :about-panel :label "About"}
+   {:id :game-list :label "Game List"}
+   {:id :game-panel :label "Game"}])
+
+(defn tabs []
+  (let [selected-panel (re-frame/subscribe [:active-panel])]
+    [re-com/horizontal-tabs
+     :model selected-panel
+     :tabs tabs-definition
+     :on-change #(re-frame/dispatch [:set-active-panel %])]))
+
+(defn header []
+  (let [server-state (re-frame/subscribe [:server-state])]
+    (fn [] [state-panel @server-state])))
+
 (defn main-panel []
-  (let [active-panel (re-frame/subscribe [:active-panel])
-        server-state (re-frame/subscribe [:server-state])]
+  (let [active-panel (re-frame/subscribe [:active-panel])]
     (fn []
       [re-com/v-box
        :height "100%"
-       :children [[state-panel @server-state]
+       :children [[header]
+                  [tabs]
                   [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
                   [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
                   [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]
-                  [:p {:on-click #(re-frame/dispatch [:create-game "New Game"])} "Create a new game"]
 
                   (panels @active-panel)]])))
