@@ -9,7 +9,7 @@
 (s/defschema db-schema
   {:name         s/Str
    :active-game  (s/maybe s/Str)
-   :active-panel (s/maybe (s/enum :home-panel :about-panel :game-list :game-panel))
+   :active-panel (s/maybe (s/enum :home-panel :about-panel :game-list :game-panel :development-panel))
    :games        {(s/pred uuid4-match) {:title           s/Str
                                         :moves           go-schema/game
                                         :empty-vertices  #{go-schema/vertex}

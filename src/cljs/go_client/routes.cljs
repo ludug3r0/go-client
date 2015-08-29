@@ -27,6 +27,9 @@
   (defroute "/games" []
             (re-frame/dispatch [:set-active-panel :game-list]))
 
+  (defroute "/development" []
+            (re-frame/dispatch [:set-active-panel :development-panel]))
+
   (defroute "/games/:game-id" [game-id]
             (re-frame/dispatch [:set-active-game game-id])
             (re-frame/dispatch [:set-active-panel :game-panel]))

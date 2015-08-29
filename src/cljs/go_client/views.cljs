@@ -78,12 +78,19 @@
                   [game-board @game-id @placed-stones @empty-vertices @playable-stones]
                   [link-to-home-page]]])))
 
+(defn development-panel []
+  [re-com/v-box
+   :children [[:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
+              [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
+              [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]]])
+
 ;; --------------------
 (defmulti panels identity)
 (defmethod panels :home-panel [] [home-panel])
 (defmethod panels :about-panel [] [about-panel])
 (defmethod panels :game-list [] [game-list-panel])
 (defmethod panels :game-panel [] [game-panel])
+(defmethod panels :development-panel [] [development-panel])
 (defmethod panels :default [] [:div])
 
 
@@ -93,7 +100,7 @@
               [:p (str "user: " (or logged-user "N/A"))]]])
 
 (def tabs-definition
-  [
+  [{:id :development-panel :label "Development"}
    {:id :home-panel :label "Home"}
    {:id :about-panel :label "About"}
    {:id :game-list :label "Game List"}
@@ -106,10 +113,6 @@
      :tabs tabs-definition
      :on-change #(re-frame/dispatch [:set-active-panel %])]))
 
-(defn header []
-  (let [server-state (re-frame/subscribe [:server-state])]
-    (fn [] [state-panel @server-state])))
-
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])]
     (fn []
@@ -117,8 +120,4 @@
        :height "100%"
        :children [[header]
                   [tabs]
-                  [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
-                  [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
-                  [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]
-
                   (panels @active-panel)]])))
