@@ -4,30 +4,6 @@
               [go-client.board :as board]))
 
 ;; --------------------
-(defn home-title []
-  (let [name (re-frame/subscribe [:name])]
-    (fn []
-      [re-com/title
-       :label (str "Hello from " @name ". This is the Home Page.")
-       :level :level1])))
-
-(defn home-panel []
-  [re-com/v-box
-   :gap "1em"
-   :children [[home-title]]])
-
-;; --------------------
-(defn about-title []
-  [re-com/title
-   :label "This is the About Page."
-   :level :level1])
-
-(defn about-panel []
-  [re-com/v-box
-   :gap "1em"
-   :children [[about-title]]])
-
-;; --------------------
 (defn game-list-title []
   [re-com/title
    :label "Game list"
@@ -87,8 +63,6 @@
 
 ;; --------------------
 (defmulti panels identity)
-(defmethod panels :home-panel [] [home-panel])
-(defmethod panels :about-panel [] [about-panel])
 (defmethod panels :game-list [] [game-list-panel])
 (defmethod panels :game-panel [] [game-panel])
 (defmethod panels :development-panel [] [development-panel])
@@ -97,8 +71,6 @@
 
 (def tabs-definition
   [{:id :development-panel :label "Development"}
-   {:id :home-panel :label "Home"}
-   {:id :about-panel :label "About"}
    {:id :game-list :label "Game List"}
    {:id :game-panel :label "Game"}])
 

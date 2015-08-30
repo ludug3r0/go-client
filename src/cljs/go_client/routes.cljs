@@ -19,12 +19,6 @@
   ;; --------------------
   ;; define routes here
   (defroute "/" []
-            (re-frame/dispatch [:set-active-panel :home-panel]))
-
-  (defroute "/about" []
-            (re-frame/dispatch [:set-active-panel :about-panel]))
-
-  (defroute "/games" []
             (re-frame/dispatch [:set-active-panel :game-list]))
 
   (defroute "/development" []

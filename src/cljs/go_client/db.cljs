@@ -9,7 +9,7 @@
 (s/defschema db-schema
   {:name         s/Str
    :active-game  (s/maybe s/Str)
-   :active-panel (s/maybe (s/enum :home-panel :about-panel :game-list :game-panel :development-panel))
+   :active-panel (s/maybe (s/enum :game-list :game-panel :development-panel))
    :games        {(s/pred uuid4-match) {:title           s/Str
                                         :moves           go-schema/game
                                         :empty-vertices  #{go-schema/vertex}
@@ -44,7 +44,7 @@
                             :playable-stones #{}}]
     {:name         "re-frame"
      :active-game  nil
-     :active-panel :home-panel
+     :active-panel :game-list
      :games       {"4f2b7fe1-5908-4533-b018-05143dbd20ca" ear-reddening-game}
      :server      {:open? false
                    :uid   :taoensso.sente/nil-uid}}))
