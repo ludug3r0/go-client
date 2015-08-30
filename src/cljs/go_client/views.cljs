@@ -72,11 +72,18 @@
        :children [[current-game-title @game-title]
                   [game-board @game-id @placed-stones @empty-vertices @playable-stones]]])))
 
-(defn development-panel []
+(defn state-panel [{:keys [connected? logged-user]}]
   [re-com/v-box
-   :children [[:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
-              [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
-              [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]]])
+   :children [[:p (str "connected to server: " (if connected? "Y" "N"))]
+              [:p (str "user: " (or logged-user "N/A"))]]])
+
+(defn development-panel []
+  (let [server-state (re-frame/subscribe [:server-state])]
+    [re-com/v-box
+     :children [[state-panel @server-state]
+                [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
+                [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
+                [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]]]))
 
 ;; --------------------
 (defmulti panels identity)
@@ -88,11 +95,6 @@
 (defmethod panels :default [] [:div])
 
 
-(defn state-panel [{:keys [connected? logged-user]}]
-  [re-com/v-box
-   :children [[:p (str "connected to server: " (if connected? "Y" "N"))]
-              [:p (str "user: " (or logged-user "N/A"))]]])
-
 (def tabs-definition
   [{:id :development-panel :label "Development"}
    {:id :home-panel :label "Home"}
@@ -101,10 +103,6 @@
    {:id :game-panel :label "Game"}])
 
 (defn header []
-  (let [server-state (re-frame/subscribe [:server-state])]
-    (fn [] [state-panel @server-state])))
-
-(defn tabs []
   (let [selected-panel (re-frame/subscribe [:active-panel])]
     [re-com/horizontal-tabs
      :model selected-panel
@@ -117,5 +115,4 @@
       [re-com/v-box
        :height "100%"
        :children [[header]
-                  [tabs]
                   (panels @active-panel)]])))
