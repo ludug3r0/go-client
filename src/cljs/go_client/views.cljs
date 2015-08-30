@@ -22,11 +22,6 @@
    :label "This is the About Page."
    :level :level1])
 
-(defn link-to-home-page []
-  [re-com/hyperlink-href
-   :label "go to Home Page"
-   :href "#/"])  
-
 (defn about-panel []
   [re-com/v-box
    :gap "1em"
@@ -75,8 +70,7 @@
       [re-com/v-box
        :gap "1em"
        :children [[current-game-title @game-title]
-                  [game-board @game-id @placed-stones @empty-vertices @playable-stones]
-                  [link-to-home-page]]])))
+                  [game-board @game-id @placed-stones @empty-vertices @playable-stones]]])))
 
 (defn development-panel []
   [re-com/v-box
