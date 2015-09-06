@@ -18,22 +18,18 @@
   (secretary/set-config! :prefix "#")
   ;; --------------------
   ;; define routes here
-  (defroute default "/" []
-            (re-frame/dispatch [:set-active-tab :game-list]))
+  (defroute default-tab "/" []
+            (re-frame/dispatch [:set-active-tab :game-list-tab]))
 
-  (defroute game-list "/games" []
-            (do
-              (.log js/console "Oh games")
-              (re-frame/dispatch [:set-active-tab :game-list])))
+  (defroute game-list-tab "/games" []
+            (re-frame/dispatch [:set-active-tab :game-list-tab]))
 
-  (defroute development "/development" []
-            (do
-              (.log js/console "Oh dev")
-              (re-frame/dispatch [:set-active-tab :development-panel])))
+  (defroute development-tab "/development" []
+            (re-frame/dispatch [:set-active-tab :development-tab]))
 
-  (defroute game "/games/:game-id" [game-id]
+  (defroute game-tab "/games/:game-id" [game-id]
             (re-frame/dispatch [:set-active-game game-id])
-            (re-frame/dispatch [:set-active-tab :game-panel]))
+            (re-frame/dispatch [:set-active-tab :game-tab]))
 
   ;; --------------------
   (hook-browser-navigation!))

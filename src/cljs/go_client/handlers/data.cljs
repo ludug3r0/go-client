@@ -16,20 +16,21 @@
     (let [checker (s/checker schema)
           valid? (fn [db]
                    (if-let [problems (checker db)]
-                     (throw (js/Error (str "schema check failed: " problems)))
+                     (throw (js/Error (str "schema check failed: " (prn problems))))
                      :success))]
       (set-validator! db valid?)
       db)))
 
 (re-frame/register-handler
   :navigate-to
-  (fn [_ [_ uri]]
-    (set! (.-href (.-location js/window)) uri)))
+  (fn [db [_ uri]]
+    (set! (.-href (.-location js/window)) uri)
+    db))
 
 (re-frame/register-handler
   :set-active-tab
-  (fn [db [_ active-panel]]
-    (assoc db :active-tab active-panel)))
+  (fn [db [_ active-tab]]
+    (assoc db :active-tab active-tab)))
 
 (re-frame/register-handler
   :set-active-game

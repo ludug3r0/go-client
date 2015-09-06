@@ -2,8 +2,7 @@
     (:require [re-frame.core :as re-frame]
               [re-com.core :as re-com]
               [go-client.board :as board]
-              [go-client.routes :as routes]
-              [secretary.core :as secretary]))
+              [go-client.routes :as routes]))
 
 ;; --------------------
 (defn game-list-title []
@@ -14,7 +13,7 @@
 (defn link-to-game [[game-id game]]
   [re-com/hyperlink-href
    :label (:title game)
-   :href (routes/game {:game-id game-id})])
+   :href (routes/game-tab {:game-id game-id})])
 
 (defn game-list []
   (let [games (re-frame/subscribe [:game-list])]
@@ -22,7 +21,7 @@
      :gap "1em"
      :children (mapv link-to-game @games)]))
 
-(defn game-list-panel []
+(defn game-list-tab []
   [re-com/v-box
    :gap "1em"
    :children [[game-list-title]
@@ -38,7 +37,7 @@
 (defn game-board [game-id placed-stones empty-vertices playable-vertices]
   [board/render-game game-id placed-stones empty-vertices playable-vertices])
 
-(defn game-panel []
+(defn game-tab []
   (let [game-id (re-frame/subscribe [:active-game-id])
         game-title (re-frame/subscribe [:game-title @game-id])
         placed-stones (re-frame/subscribe [:game-stones @game-id])
@@ -55,7 +54,7 @@
    :children [[:p (str "connected to server: " (if connected? "Y" "N"))]
               [:p (str "user: " (or logged-user "N/A"))]]])
 
-(defn development-panel []
+(defn development-tab []
   (let [server-state (re-frame/subscribe [:server-state])]
     [re-com/v-box
      :children [[state-panel @server-state]
@@ -65,22 +64,22 @@
 
 ;; --------------------
 (defmulti panels identity)
-(defmethod panels :game-list [] [game-list-panel])
-(defmethod panels :game-panel [] [game-panel])
-(defmethod panels :development-panel [] [development-panel])
-(defmethod panels :default [] [:div])
+(defmethod panels :game-list-tab [] [game-list-tab])
+(defmethod panels :game-tab [] [game-tab])
+(defmethod panels :development-tab [] [development-tab])
+(defmethod panels :default-tab [] [game-list-tab])
 
 (defmulti panels-url identity)
-(defmethod panels-url :game-list [] (routes/default))
-(defmethod panels-url :game-panel [] (routes/game))
-(defmethod panels-url :development-panel [] (routes/development))
-(defmethod panels-url :default [] (routes/default))
+(defmethod panels-url :game-list-tab [] (routes/default-tab))
+(defmethod panels-url :game-tab [] (routes/game-tab))
+(defmethod panels-url :development-tab [] (routes/development-tab))
+(defmethod panels-url :default-tab [] (routes/default-tab))
 
 
 (def tabs-definition
-  [{:id :development-panel :label "Development"}
-   {:id :game-list :label "Game List"}
-   {:id :game-panel :label "Game"}])
+  [{:id :development-tab :label "Development"}
+   {:id :game-list-tab :label "Game List"}
+   {:id :game-tab :label "Game"}])
 
 (defn header []
   (let [selected-panel (re-frame/subscribe [:active-tab])]
