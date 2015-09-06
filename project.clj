@@ -14,7 +14,7 @@
 
                            ;; client side dependencies
                            [org.clojure/clojurescript "0.0-3211"]
-                           [reagent "0.5.0"]
+                           [reagent "0.5.1-rc2"]
                            [re-frame "0.4.1"]
                            [re-com "0.5.4"]
                            [secretary "1.2.3"]

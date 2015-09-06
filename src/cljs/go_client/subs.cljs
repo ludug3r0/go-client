@@ -56,6 +56,6 @@
     (reaction (:games @db))))
 
 (re-frame/register-sub
-  :active-panel
+  :active-tab
   (fn [db _]
-    (reaction (:active-panel @db))))
+    (reaction (:active-tab @db))))

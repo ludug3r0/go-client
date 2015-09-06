@@ -22,9 +22,14 @@
       db)))
 
 (re-frame/register-handler
-  :set-active-panel
+  :navigate-to
+  (fn [_ [_ uri]]
+    (set! (.-href (.-location js/window)) uri)))
+
+(re-frame/register-handler
+  :set-active-tab
   (fn [db [_ active-panel]]
-    (assoc db :active-panel active-panel)))
+    (assoc db :active-tab active-panel)))
 
 (re-frame/register-handler
   :set-active-game

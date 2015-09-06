@@ -1,7 +1,9 @@
 (ns go-client.views
     (:require [re-frame.core :as re-frame]
               [re-com.core :as re-com]
-              [go-client.board :as board]))
+              [go-client.board :as board]
+              [go-client.routes :as routes]
+              [secretary.core :as secretary]))
 
 ;; --------------------
 (defn game-list-title []
@@ -12,7 +14,7 @@
 (defn link-to-game [[game-id game]]
   [re-com/hyperlink-href
    :label (:title game)
-   :href (str "#/games/" game-id)])
+   :href (routes/game {:game-id game-id})])
 
 (defn game-list []
   (let [games (re-frame/subscribe [:game-list])]
@@ -68,6 +70,12 @@
 (defmethod panels :development-panel [] [development-panel])
 (defmethod panels :default [] [:div])
 
+(defmulti panels-url identity)
+(defmethod panels-url :game-list [] (routes/default))
+(defmethod panels-url :game-panel [] (routes/game))
+(defmethod panels-url :development-panel [] (routes/development))
+(defmethod panels-url :default [] (routes/default))
+
 
 (def tabs-definition
   [{:id :development-panel :label "Development"}
@@ -75,16 +83,16 @@
    {:id :game-panel :label "Game"}])
 
 (defn header []
-  (let [selected-panel (re-frame/subscribe [:active-panel])]
+  (let [selected-panel (re-frame/subscribe [:active-tab])]
     [re-com/horizontal-tabs
      :model selected-panel
      :tabs tabs-definition
-     :on-change #(re-frame/dispatch [:set-active-panel %])]))
+     :on-change #(re-frame/dispatch [:navigate-to (panels-url %)])]))
 
 (defn main-panel []
-  (let [active-panel (re-frame/subscribe [:active-panel])]
+  (let [active-tab (re-frame/subscribe [:active-tab])]
     (fn []
       [re-com/v-box
        :height "100%"
        :children [[header]
-                  (panels @active-panel)]])))
+                  (panels @active-tab)]])))
