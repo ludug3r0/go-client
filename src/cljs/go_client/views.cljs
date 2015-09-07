@@ -59,6 +59,7 @@
     [re-com/v-box
      :children [[state-panel @server-state]
                 [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/echo "echo"]])} "echo"]
+                [:p {:on-click #(re-frame/dispatch [:send-event-to-server [:util/broadcast "broadcast"]])} "broadcast"]
                 [:p {:on-click #(re-frame/dispatch [:log-into-server "rafael"])} "login"]
                 [:p {:on-click #(re-frame/dispatch [:logout-from-server])} "logout"]]]))
 

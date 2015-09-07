@@ -15,32 +15,18 @@
     [ring.middleware.defaults]
     [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
 
-    [clojure.core.async :as async :refer (<! >! put! chan)]
+    [go-server.handlers :as handlers]
     ))
 
-(defonce db (atom {}))
+
 
 ;;TODO #5: improve how we bind up these channels and handlers
-(let [{:keys [ch-recv send-fn ajax-post-fn ajax-get-or-ws-handshake-fn
-              connected-uids]}
+(let [{:keys [ch-recv ajax-post-fn ajax-get-or-ws-handshake-fn]}
       (sente/make-channel-socket! sente-web-server-adapter {})]
   (def ring-ajax-post ajax-post-fn)
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
-  (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
-  (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
-  (def connected-uids connected-uids)                       ; Watchable, read-only atom
-  )
+  (sente/start-chsk-router! ch-recv handlers/event-msg-handler))
 
-;;TODO #5: extract this to a proper server handler namespace/package
-(async/go-loop [event-msg (<! ch-chsk)]
-  ;; handle events
-  (condp :id event-msg
-    :util/echo (chsk-send! :sente/all-users-without-uid [:util/echo (:?data event-msg)]))
-
-  ;; reply if the user requests
-  (when-let [reply-fn (:?reply-fn event-msg)]
-    (reply-fn :ack))
-  (recur (<! ch-chsk)))
 
 ;;TODO #4: proper login logic
 (defn login! [ring-request]
